@@ -16,7 +16,6 @@ pipeline {
         bat 'python -m pytest'
     }
 }
-        }
 
         stage('Build Docker Image') {
             steps {
