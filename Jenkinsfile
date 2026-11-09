@@ -5,14 +5,16 @@ pipeline {
     stages {
 
         stage('Run Selenium Tests with pytest') {
-    steps {
-        echo 'Running Selenium Tests using pytest'
-        bat 'pip install -r requirements.txt'
-        bat 'start /B "" "C:\\Users\\dell\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe" app.py'
-        bat 'timeout /t 5 /nobreak'
-        bat '"C:\\Users\\dell\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe" -m pytest -v'
-    }
-}
+            steps {
+                    echo "Running Selenium Tests using pytest"
+                    bat 'pip install -r requirements.txt'
+                    bat 'start /B python app.py'
+
+                    bat 'ping 127.0.0.1 -n 5 > nul'
+                    
+                    bat 'python -m pytest -v'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -36,7 +38,7 @@ pipeline {
         }
         stage('Deploy to Kubernetes') { 
             steps { 
-                    // apply deployment & service 
+             
                     bat 'kubectl apply -f deployment.yaml --validate=false' 
                     bat 'kubectl apply -f service.yaml' 
             } 
