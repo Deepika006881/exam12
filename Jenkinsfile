@@ -5,15 +5,17 @@ pipeline {
     stages {
 
         stage('Run Selenium Tests with pytest') {
-            steps {
-                    echo "Running Selenium Tests using pytest"
-                    bat 'pip install -r requirements.txt'
-                    bat 'start /B python app.py'
-
-                    bat 'ping 127.0.0.1 -n 5 > nul'
-                    
-                    bat 'python -m pytest -v'
-            }
+    steps {
+        echo 'Running Selenium Tests using pytest'
+        bat 'pip install -r requirements.txt'
+        bat '''
+        set JENKINS_NODE_COOKIE=dontKillMe
+        start /B "" "C:\\Users\\dell\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe" app.py
+        timeout /t 5 /nobreak
+        '''
+        bat 'python -m pytest'
+    }
+}
         }
 
         stage('Build Docker Image') {
